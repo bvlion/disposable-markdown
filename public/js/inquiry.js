@@ -25,7 +25,7 @@ $(function() {
               if (data.error != null) {
                 reject(data.error)
               } else {
-                resolve('以下の内容でお問い合わせを受け付けました。<br><br>返信先：'+ $("#mail").val() + '<br>' + value.replace(/\r?\n/g, '<br>'))
+                resolve('以下の内容でお問い合わせを受け付けました。<br><br>返信先：'+ $("#mail").val() + '<br>' + $("#comment").val().replace(/\r?\n/g, '<br>'))
               }
             }).fail(function(jqXHR, statusText, errorThrown) {
               reject("送信に失敗しました。申し訳ございませんが、再度お試しください。");
