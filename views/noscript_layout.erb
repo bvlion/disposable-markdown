@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="/img/favicon.png">
+    <title id="title">JavaScriptが無効になっています(´･ω･`)</title>
+
+    <link rel="stylesheet" href="//cdn.muicss.com/mui-0.9.16/css/mui.min.css">
+    <link rel="stylesheet" href="//cdn.muicss.com/mui-0.9.16/extra/mui-colors.min.css">
+    <link rel="stylesheet" href="/css/github.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <script> location.href = "/"; </script>
+  </head>
+  <body>
+    <header class="mui-appbar mui--z1 mui--bg-color-teal-400">
+      <div class="mui-container">
+        <table width="100%">
+          <tr class="mui--appbar-height">
+            <td class="mui--text-title">使い捨てマークダウン</td>
+          </tr>
+        </table>
+      </div>
+    </header>
+    <div id="content-wrapper" class="markdown-body">
+      <div class="mui--appbar-height"></div>
+      <%= yield %>
+    </div>
+    <footer class="mui--bg-color-teal-50">
+      <div class="mui-container mui--text-center">
+        Made with ♥ by Iwai Satoshi
+      </div>
+    </footer>
+  </body>
+</html>

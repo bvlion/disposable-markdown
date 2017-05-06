@@ -1,0 +1,69 @@
+html,
+body {
+  height: 100%;
+}
+
+html,
+body,
+input,
+textarea,
+buttons {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+}
+
+header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 2;
+}
+
+#content-wrapper {
+  min-height: 100%;
+  margin-bottom: -100px;
+  padding-bottom: 100px;
+}
+
+footer {
+  height: 70px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 35px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 300px !important;
+}
+
+.mui--text-title {
+  font-weight: bold;
+}
+
+.error-img {
+  max-width: 200px !important;
+  width: 100%;
+}
+
+.error-500-img {
+  max-width: 300px !important;
+  width: 100%;
+}
+
+.thats-all {
+    margin-top: 13px;
+    text-align: right;
+    width: 100%;
+}
+
+.func-footer {
+  margin-top: 15px;
+}
+
+@media screen and (max-width:767px) {
+  footer {
+    height: 100px;
+  }
+}

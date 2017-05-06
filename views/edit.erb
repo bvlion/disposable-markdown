@@ -1,0 +1,27 @@
+<div class="container">
+        <div class="row">
+          <div class="mui-col-xs-6">
+            <div class="mui-textfield">
+              <input type="text" value="<%= @titile %>" id="md_title" required>
+              <label>タイトル</label>
+            </div>
+            <div class="mui-textfield">
+              <textarea id="editor" required><%= @markdown %></textarea>
+            </div>
+            <div class="mui-textfield">
+              <input type="text" id="edit_pass" required>
+              <label>削除・更新用パスワード</label>
+            </div>
+            <div class="mui-textfield">
+              <input type="text" id="view_pass">
+              <label>閲覧用パスワード</label>
+            </div>
+            <button id="regist" class="mui-btn mui-btn--raised mui-btn--primary">投稿する</button><% if !@hash_value.empty? then %>
+            <button id="delete" class="mui-btn mui-btn--raised mui-btn--danger">この投稿を削除する</button><% end %>
+            <input type="hidden" id="hash" value="<%= @hash_value %>">
+          </div>
+          <div class="mui-col-xs-6 mui--bg-color-yellow-50">
+            <div id="result"></div>
+          </div>
+        </div>
+      </div>
