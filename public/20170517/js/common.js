@@ -15,7 +15,6 @@ function removeLoading() {
 
 function markdownPrev(id) {
   $('#result').html(marked(escapeHtml($(id).val())));
-  $('#result').html(marked(escapeHtml($('#editor').val())));
   $('pre code').each(function(i, block) {
     $(block).html(unEcapeHtml($(block).html()))
     hljs.highlightBlock(block);
