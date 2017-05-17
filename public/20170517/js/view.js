@@ -4,7 +4,7 @@ $(function() {
   if ($("#markdown").val() == "") {
     passworddialog();
   } else {
-    markdownPrev();
+    markdownPrev('#markdown');
   }
 });
 
@@ -23,6 +23,7 @@ function passworddialog() {
       })
     }
   }).then(function (result) {
+    dispLoading("展開中...");
     $.ajax({
       url: '/viewauth/' + $("#hash").val(),
       type:'GET',
@@ -33,7 +34,7 @@ function passworddialog() {
       if (data.error === undefined) {
         $("#markdown").val(data.markdown);
         $("#title").text(data.title);
-        markdownPrev();
+        markdownPrev('#markdown');
       } else {
         swal({
           title: data.error,
@@ -46,6 +47,8 @@ function passworddialog() {
         text: 'お手数ですが、再度お試しください。',
         type: 'error'
       }).then(function() { passworddialog(); }, function(dismiss) { passworddialog(); });
+    }).always(function() {
+      removeLoading();
     });
   }, function (dismiss) {
       if (dismiss === 'cancel') {
@@ -58,27 +61,4 @@ function passworddialog() {
         }).then(function() { passworddialog(); }, function(dismiss) { passworddialog(); });
       }
   });
-}
-
-function markdownPrev() {
-  $('#result').html(marked(escapeHtml($('#markdown').val())));
-  $('pre code').each(function(i, block) {
-    $(block).html(unEcapeHtml($(block).html()))
-    hljs.highlightBlock(block);
-  });
-}
-
-function escapeHtml(str) {
-  if (str === null || str === undefined) {
-    return "";
-  }
-  return str.replace(/\&/g, "&amp;").replace(/\</g, "&lt;").replace(/\>/g, "&gt;").replace(/\'/g, "&#x27;").replace(/\"/g, "&quot;");
-}
-
-
-function unEcapeHtml(str) {
-  if (str === null || str === undefined) {
-    return "";
-  }
-  return str.replace(/\&lt\;/g, "<").replace(/\&gt\;/g, ">").replace(/\&quot\;/g, '"').replace(/\&\#x27\;/g, "'").replace(/\&amp\;/g, "&");
 }

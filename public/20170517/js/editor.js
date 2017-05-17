@@ -1,12 +1,12 @@
 $(function() {
   marked.setOptions({ langPrefix: '' });
-  $('#editor').keyup(function() { markdownPrev(); });
+  $('#editor').keyup(function() { markdownPrev('#editor'); });
   $('#md_title').keyup(function() { $("#title").text($('#md_title').val()); });
 
   if ($("#hash").val() != "") {
     passworddialog();
   } else {
-    markdownPrev();
+    markdownPrev('#editor');
   }
 
   $("#delete").click(function() {
@@ -16,6 +16,7 @@ $(function() {
       type: 'warning',
       showCancelButton: true,
     }).then(function (result) {
+      dispLoading("処理中...");
       $.ajax({
         url: '/delete/' + $("#hash").val(),
         type:'PUT',
@@ -41,6 +42,8 @@ $(function() {
           text: 'お手数ですが、再度お試しください。',
           type: 'error'
         })
+      }).always(function() {
+        removeLoading();
       });
     }).catch(swal.noop);
   });
@@ -59,6 +62,7 @@ $(function() {
         return false;
     }
 
+    dispLoading("処理中...");
     $.ajax({
       url: '/regist',
       type:'POST',
@@ -91,6 +95,8 @@ $(function() {
         text: 'お手数ですが、再度お試しください。',
         type: 'error'
       });
+    }).always(function() {
+      removeLoading();
     });
   });
 })
@@ -110,6 +116,7 @@ function passworddialog() {
       })
     }
   }).then(function (result) {
+    dispLoading("処理中...");
     $.ajax({
       url: '/editauth/' + $("#hash").val(),
       type:'GET',
@@ -122,7 +129,7 @@ function passworddialog() {
         $("#edit_pass").val(result);
         $("#view_pass").val(data.edit_pass);
         $('#md_title').val($("#title").text());
-        markdownPrev();
+        markdownPrev('#editor');
       } else {
         swal({
           title: data.error,
@@ -135,6 +142,8 @@ function passworddialog() {
         text: 'お手数ですが、再度お試しください。',
         type: 'error'
       }).then(function() { passworddialog(); }, function(dismiss) { passworddialog(); });
+    }).always(function() {
+      removeLoading();
     });
   }, function (dismiss) {
       if (dismiss === 'cancel') {
@@ -147,27 +156,4 @@ function passworddialog() {
         }).then(function() { passworddialog(); }, function(dismiss) { passworddialog(); });
       }
   });
-}
-
-function markdownPrev() {
-  $('#result').html(marked(escapeHtml($('#editor').val())));
-  $('pre code').each(function(i, block) {
-    $(block).html(unEcapeHtml($(block).html()))
-    hljs.highlightBlock(block);
-  });
-}
-
-function escapeHtml(str) {
-  if (str === null || str === undefined) {
-    return "";
-  }
-  return str.replace(/\&/g, "&amp;").replace(/\</g, "&lt;").replace(/\>/g, "&gt;").replace(/\'/g, "&#x27;").replace(/\"/g, "&quot;");
-}
-
-
-function unEcapeHtml(str) {
-  if (str === null || str === undefined) {
-    return "";
-  }
-  return str.replace(/\&lt\;/g, "<").replace(/\&gt\;/g, ">").replace(/\&quot\;/g, '"').replace(/\&\#x27\;/g, "'").replace(/\&amp\;/g, "&");
 }

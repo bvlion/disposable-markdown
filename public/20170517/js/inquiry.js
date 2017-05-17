@@ -15,6 +15,7 @@ $(function() {
             reject('お問い合わせ内容をご入力ください。')
             $("#comment").addClass("swal2-inputerror");
           } else {
+            dispLoading("送信中...");
             $.ajax({
               type: "POST",
               dataType: "json",
@@ -29,6 +30,8 @@ $(function() {
               }
             }).fail(function(jqXHR, statusText, errorThrown) {
               reject("送信に失敗しました。申し訳ございませんが、再度お試しください。");
+            }).always(function() {
+              removeLoading();
             });
           }
         })

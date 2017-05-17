@@ -7,6 +7,8 @@ require 'net/https'
 set :erb, :escape_html => true
 use Rack::SslEnforcer if production?
 
+$dir = "20170517"
+
 # トップ
 get '/' do
   @title = "使い捨てマークダウン"
