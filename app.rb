@@ -25,7 +25,7 @@ end
 
 # サイトマップ
 get '/sitemap' do
-  @title = "台とマップ"
+  @title = "サイトマップ"
   @description = "当サイト「使い捨てマークダウン」のサイトマップとなります。"
   erb :sitemap
 end
