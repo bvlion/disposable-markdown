@@ -19,28 +19,28 @@ end
 # Q&A
 get '/qa' do
   @title = "Q & A"
-  @description = "当サイト「使い捨てマークダウン」のQ&Aとなります。"
+  @description = "使い捨てマークダウンのQ&Aとなります。"
   erb :qa
 end
 
 # サイトマップ
 get '/sitemap' do
   @title = "サイトマップ"
-  @description = "当サイト「使い捨てマークダウン」のサイトマップとなります。"
+  @description = "使い捨てマークダウンのサイトマップとなります。"
   erb :sitemap
 end
 
 # 利用規約
 get '/rule' do
   @title = "利用規約"
-  @description = "当サイト「使い捨てマークダウン」の利用規約となります。"
+  @description = "使い捨てマークダウンの利用規約となります。"
   erb :rule
 end
 
 # プライバシー
 get '/privacy' do
   @title = "プライバシーポリシー"
-  @description = "当サイト「使い捨てマークダウン」のプライバシーポリシーとなります。"
+  @description = "使い捨てマークダウンのプライバシーポリシーとなります。"
   erb :privacy
 end
 
