@@ -72,6 +72,7 @@ $(function() {
         markdown : $('#editor').val(),
         edit_pass : $('#edit_pass').val(),
         view_pass : $('#view_pass').val(),
+        ogp_image_url : $('#ogp_image_url').val(),
         hash : $('#hash').val()
       },
       timeout:10000,
@@ -128,6 +129,7 @@ function passworddialog() {
         $("#editor").val(data.markdown);
         $("#edit_pass").val(result);
         $("#view_pass").val(data.edit_pass);
+        $('#ogp_image_url').val(data.ogp_image_url);
         $('#md_title').val($("#title").text());
         markdownPrev('#editor');
       } else {

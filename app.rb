@@ -7,7 +7,7 @@ require 'net/https'
 set :erb, :escape_html => true
 use Rack::SslEnforcer if production?
 
-$dir = "20170517"
+$dir = "20170818"
 
 # トップ
 get '/' do
@@ -44,6 +44,13 @@ get '/privacy' do
   erb :privacy
 end
 
+# アップデート情報
+get '/versions' do
+  @title = "アップデート情報"
+  @description = "使い捨てマークダウンのアップデート情報となります。"
+  erb :versions
+end
+
 # 表示
 get '/view/?:hash?' do |hash|
   if hash.nil? then
@@ -51,7 +58,7 @@ get '/view/?:hash?' do |hash|
   end
 
   client = get_connection
-  stmt = client.prepare("SELECT 投稿タイトル, 内容, 閲覧用パスワード FROM 投稿 WHERE URL用ハッシュ値_SHA1NOW = ?")
+  stmt = client.prepare("SELECT 投稿タイトル, 内容, 閲覧用パスワード, OGP画像URL FROM 投稿 WHERE URL用ハッシュ値_SHA1NOW = ?")
   result = stmt.execute(hash)
 
   if result.count == 0 then
@@ -67,12 +74,14 @@ get '/view/?:hash?' do |hash|
         @markdown = e1["内容"]
         @title = e1["投稿タイトル"]
         @description = e1["内容"].partition("\n")[0]
+        @ogp_image_url = e1["OGP画像URL"]
       end
   end
 
   client.close
 
   @js = "view.js"
+
   erb :view
 end
 
@@ -85,7 +94,7 @@ get '/viewauth/:hash' do |hash|
   pass = "#{params[:pass]}"
 
   client = get_connection
-  stmt = client.prepare("SELECT 投稿タイトル, 内容 FROM 投稿 WHERE URL用ハッシュ値_SHA1NOW = ? AND 閲覧用パスワード = ?")
+  stmt = client.prepare("SELECT 投稿タイトル, 内容, OGP画像URL FROM 投稿 WHERE URL用ハッシュ値_SHA1NOW = ? AND 閲覧用パスワード = ?")
   result = stmt.execute(hash, pass)
 
   if result.count == 0 then
@@ -108,7 +117,7 @@ get '/edit/?:hash?' do |hash|
 
   if !hash.nil? then
     client = get_connection
-    stmt = client.prepare("SELECT 投稿タイトル, 内容 FROM 投稿 WHERE URL用ハッシュ値_SHA1NOW = ?")
+    stmt = client.prepare("SELECT 投稿タイトル, 内容, OGP画像URL FROM 投稿 WHERE URL用ハッシュ値_SHA1NOW = ?")
     result = stmt.execute(hash)
     if result.count == 0 then
       halt 404
@@ -116,6 +125,7 @@ get '/edit/?:hash?' do |hash|
     result.each do |e1|
         @title = e1["投稿タイトル"]
         @description = e1["内容"].partition("\n")[0]
+        @ogp_image_url = e1["OGP画像URL"]
     end
     @hash_value = hash
     client.close
@@ -131,31 +141,33 @@ post '/regist' do
   markdown = "#{params[:markdown]}"
   edit_pass = "#{params[:edit_pass]}"
   view_pass = "#{params[:view_pass]}"
+  ogp_image_url = "#{params[:ogp_image_url]}"
   hash = "#{params[:hash]}"
 
   client = get_connection
   if hash.empty? then
     insert_query = <<-EOS
       INSERT INTO 投稿
-        (投稿タイトル, 内容, 閲覧用パスワード, 削除・更新用パスワード, URL用ハッシュ値_SHA1NOW)
+        (投稿タイトル, 内容, 閲覧用パスワード, 削除・更新用パスワード, URL用ハッシュ値_SHA1NOW, OGP画像URL)
       VALUES
-        (?, ?, ?, ?, ?)
+        (?, ?, ?, ?, ?, ?)
     EOS
     hash = Digest::SHA1.hexdigest(Time.now.strftime("%Y%m%d%H%M%S"))
     stmt = client.prepare(insert_query)
-    result = stmt.execute(title, markdown, view_pass, edit_pass, hash)
+    result = stmt.execute(title, markdown, view_pass, edit_pass, hash, ogp_image_url)
   else
     update_query = <<-EOS
       UPDATE 投稿 SET
         投稿タイトル = ?,
         内容 = ?,
         閲覧用パスワード = ?,
-        削除・更新用パスワード = ?
+        削除・更新用パスワード = ?,
+        OGP画像URL = ?
       WHERE
         URL用ハッシュ値_SHA1NOW = ?
     EOS
     stmt = client.prepare(update_query)
-    result = stmt.execute(title, markdown, view_pass, edit_pass, hash)
+    result = stmt.execute(title, markdown, view_pass, edit_pass, ogp_image_url, hash)
   end
 
   if result == 0 then
@@ -190,14 +202,14 @@ get '/editauth/:hash' do |hash|
   pass = "#{params[:pass]}"
 
   client = get_connection
-  stmt = client.prepare("SELECT 内容, 閲覧用パスワード FROM 投稿 WHERE URL用ハッシュ値_SHA1NOW = ? AND 削除・更新用パスワード = ?")
+  stmt = client.prepare("SELECT 内容, 閲覧用パスワード, OGP画像URL FROM 投稿 WHERE URL用ハッシュ値_SHA1NOW = ? AND 削除・更新用パスワード = ?")
   result = stmt.execute(hash, pass)
 
   if result.count == 0 then
     data = {error: "パスワードが一致しません。"}
   else
     result.each do |e1|
-      data = {markdown: e1["内容"], edit_pass: e1["閲覧用パスワード"]}
+      data = {markdown: e1["内容"], edit_pass: e1["閲覧用パスワード"], ogp_image_url: e1["OGP画像URL"]}
     end
   end
   client.close

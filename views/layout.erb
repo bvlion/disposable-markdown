@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <noscript><meta http-equiv="refresh" content="0; URL=/noscript" /></noscript>
-    <link rel="icon" type="image/png" href="/img/favicon.png">
+    <noscript><meta http-equiv="refresh" content="0; URL=/noscript" /></noscript><% if @ogp_image_url.nil? then %>
+    <link rel="icon" type="image/png" href="/img/favicon.png"><% else %>
+    <link rel="icon" type="image/png" href="<%= @ogp_image_url %>"><% end %>
     <title id="title"><%= @title %></title>
     <link rel="stylesheet" href="//cdn.muicss.com/mui-0.9.16/css/mui.min.css">
     <link rel="stylesheet" href="//cdn.muicss.com/mui-0.9.16/extra/mui-colors.min.css">
@@ -16,8 +17,9 @@
     <meta property="og:title" content="<%= @title %>">
     <meta property="og:type" content="<% if request.path_info == "/" then %>website<% else %>article<% end %>">
     <meta property="og:description" content="<%= @description %>">
-    <meta property="og:url" content="<%= request.url %>">
-    <meta property="og:image" content="https://disposable-markdown.herokuapp.com/img/favicon.png">
+    <meta property="og:url" content="<%= request.url %>"><% if @ogp_image_url.nil? then %>
+    <meta property="og:image" content="https://disposable-markdown.herokuapp.com/img/favicon.png"><% else %>
+    <meta property="og:image" content="<%= @ogp_image_url %>"><% end %>
     <meta property="og:site_name" content="使い捨てマークダウン">
     <meta name="keywords" content="サービス,マークダウン,Markdown,使い捨て,disposable">
     <meta name="description" content="<%= @description %>">
@@ -56,9 +58,12 @@
           Copyright &copy; 2017 - <%= Date.today.strftime('%Y') %> Iwai Satoshi All Rights Reserved.
       </div>
       <div class="mui-row mui--text-center func-footer">
-        <div class="mui-col-md-2 mui-col-md-offset-3"><a href="/sitemap">サイトマップ</a></div>
-        <div class="mui-col-md-2"><a href="/rule">利用規約</a></div>
-        <div class="mui-col-md-3"><a href="/privacy">プライバシーポリシー</a></div>
+        <div class="mui-col-md-2"></div>
+        <div class="mui-col-md-2 text-center"><a href="/sitemap">サイトマップ</a></div>
+        <div class="mui-col-md-2 text-center"><a href="/rule">利用規約</a></div>
+        <div class="mui-col-md-2 text-center"><a href="/privacy">プライバシーポリシー</a></div>
+        <div class="mui-col-md-2 text-center"><a href="/versions">アップデート情報</a></div>
+        <div class="mui-col-md-2"></div>
       </div>
     </footer>
     <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>

@@ -18,4 +18,6 @@ if client.query("show tables").count == 0 then
   client.query(create_query)
 end
 
+# ALTER TABLE 投稿 ADD OGP画像URL VARCHAR(512) AFTER URL用ハッシュ値_SHA1NOW;
+
 client.close
